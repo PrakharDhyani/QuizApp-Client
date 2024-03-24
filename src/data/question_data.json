@@ -1,0 +1,91 @@
+[
+    {
+      "id": 4,
+      "quiz_id": 2,
+      "question_photo_url": "https://example.com/history_question1.jpg",
+      "answer_photo_url": "https://example.com/history_answer1.jpg",
+      "question_text": "Who was the first President of the United States?",
+      "options": ["Thomas Jefferson", "George Washington", "John Adams", "James Madison"],
+      "correct_answer": "George Washington",
+      "timer": 25,
+      "background_color": "#ffffff"
+    },
+    {
+      "id": 5,
+      "quiz_id": 2,
+      "question_photo_url": "https://example.com/history_question2.jpg",
+      "answer_photo_url": "https://example.com/history_answer2.jpg",
+      "question_text": "Which ancient civilization built the pyramids?",
+      "options": ["Greek", "Roman", "Egyptian", "Mayan"],
+      "correct_answer": "Egyptian",
+      "timer": 20,
+      "background_color": "#ffffff"
+    },
+    {
+      "id": 6,
+      "quiz_id": 2,
+      "question_photo_url": "https://example.com/history_question3.jpg",
+      "answer_photo_url": "https://example.com/history_answer3.jpg",
+      "question_text": "When did World War II end?",
+      "options": ["1945", "1918", "1939", "1941"],
+      "correct_answer": "1945",
+      "timer": 30,
+      "background_color": "#ffffff"
+    },
+    {
+      "id": 7,
+      "quiz_id": 2,
+      "question_photo_url": "https://example.com/history_question4.jpg",
+      "answer_photo_url": "https://example.com/history_answer4.jpg",
+      "question_text": "Who was the first female Prime Minister of the United Kingdom?",
+      "options": ["Margaret Thatcher", "Theresa May", "Indira Gandhi", "Angela Merkel"],
+      "correct_answer": "Margaret Thatcher",
+      "timer": 25,
+      "background_color": "#ffffff"
+    },
+    {
+      "id": 8,
+      "quiz_id": 2,
+      "question_photo_url": "https://example.com/history_question5.jpg",
+      "answer_photo_url": "https://example.com/history_answer5.jpg",
+      "question_text": "Which country was the first to send an object into space?",
+      "options": ["United States", "Russia", "China", "Germany"],
+      "correct_answer": "Russia",
+      "timer": 20,
+      "background_color": "#ffffff"
+    },
+    {
+      "id": 1,
+      "quiz_id": 1,
+      "question_photo_url": "https://example.com/question1.jpg",
+      "answer_photo_url": "https://example.com/answer1.jpg",
+      "question_text": "What is the capital of France?",
+      "options": ["London", "Paris", "Berlin", "Madrid"],
+      "correct_answer": "Paris",
+      "timer": 30,
+      "background_color": "#ffffff"
+    },
+    {
+      "id": 2,
+      "quiz_id": 1,
+      "question_photo_url": "https://example.com/question2.jpg",
+      "answer_photo_url": "https://example.com/answer2.jpg",
+      "question_text": "What is the powerhouse of the cell?",
+      "options": ["Mitochondria", "Nucleus", "Ribosome", "Endoplasmic Reticulum"],
+      "correct_answer": "Mitochondria",
+      "timer": 20,
+      "background_color": "#ffffff"
+    },
+    {
+      "id": 3,
+      "quiz_id": 1,
+      "question_photo_url": "https://example.com/question3.jpg",
+      "answer_photo_url": "https://example.com/answer3.jpg",
+      "question_text": "What is the largest planet in our solar system?",
+      "options": ["Mars", "Venus", "Jupiter", "Saturn"],
+      "correct_answer": "Jupiter",
+      "timer": 25,
+      "background_color": "#ffffff"
+    }
+  ]
+  

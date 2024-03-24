@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "title": "Quiz",
+      "photos": [
+        "https://example.com/photo1.jpg",
+        "https://example.com/photo2.jpg",
+        "https://example.com/photo3.jpg",
+        "https://example.com/photo4.jpg"
+      ],
+      "num_questions": 3,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 2,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    }
+  ]
+  
