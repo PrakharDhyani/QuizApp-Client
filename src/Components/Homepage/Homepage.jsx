@@ -1,31 +1,28 @@
 import React from 'react';
-import Quizcard from '../QuizCard/Quizcard';
-import Createquizcard from '../CreateQuizCard/Createquizcard';
+import logo from '/assets/logo.png'
 import QuizData from "../../data/quiz_Data.json";
-import "./Homepage.css";
+import QuizCard from "../QuizCard/Quizcard"
+import CreateQuizButton from "../CreateQuizCard/Createquizcard"
+import "./Homepage.css"
+
 
 const HomePage = () => {
-  // Assume quizzes is an array of quiz objects
-  const quizzes = QuizData;
-
-  const handleViewOptions = (quiz) => {
-    // Handle logic for viewing options for the selected quiz
-  };
-
-  const handleAddNewQuiz = () => {
-    // Handle logic for adding a new quiz
-  };
-
+  const quizzes = QuizData
   return (
-    <div className="homepage-container">
-      <h1 className="homepage-heading">Quizzes</h1>
-      <div className="quiz-cards-container">
-        {quizzes.map((quiz) => (
-          <Quizcard key={quiz.id} quiz={quiz} onViewOptions={handleViewOptions} />
-        ))}
-      </div>
+    <div className="homepage">
+      <header className="header">
+          <img src={logo} alt="Logo" className="logo" />
+          <h1 className="title">Quiz Mastery</h1> 
+      </header>
 
-      <Createquizcard onAddNewQuiz={handleAddNewQuiz} />
+      <main className="main-content">
+        <div className="quiz-cards">
+          {quizzes.map((quiz) => (
+            <QuizCard key={quiz.id} quiz={quiz} />
+          ))}
+        <CreateQuizButton />
+        </div>
+      </main>
     </div>
   );
 };

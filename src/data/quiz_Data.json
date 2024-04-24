@@ -22,6 +22,66 @@
       ],
       "num_questions": 5,
       "background_color": "#f0f0f0"
+    },
+    {
+      "id": 3,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 4,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 5,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 6,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 7,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
     }
   ]
   

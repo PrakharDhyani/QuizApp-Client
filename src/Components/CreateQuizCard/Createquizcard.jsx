@@ -2,8 +2,8 @@ import React from 'react'
 
 function Createquizcard() {
   return (
-    <div>
-      CreatequizCards
+    <div className='quiz-card' >
+      + Createquiz 
     </div>
   )
 }

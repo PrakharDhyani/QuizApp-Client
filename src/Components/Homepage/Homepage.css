@@ -1,0 +1,72 @@
+.homepage {
+    /* background-image: url('/assets/yellowBackground.jpg'); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #e2c480 ;
+    height : 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+    padding: 15px;
+    background-color: #FAF3E0 ;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    height: 12vh;
+    border-radius: 6px;
+  }
+
+  .logo {
+    width: 4.5rem; 
+    height: 4.5rem; 
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333333;
+    margin-left: 10px;
+  }
+  
+  /* Main content styling */
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #FAF3E0;
+  }
+  
+
+  .quiz-cards {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
+    height: 80vh;
+    gap: 1rem;
+    padding: 1rem;
+    justify-content: flex-start;
+  }
+  
+  .create-quiz-button {
+    background-color: #4caf50;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .create-quiz-button:hover {
+    background-color: #388e3c;
+  }
+  
