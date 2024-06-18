@@ -3,8 +3,9 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Quizpage from './Components/Quizpage/Quizpage.jsx';
-import HomePage from './Components/Homepage/Homepage.jsx';
+import Quizpage from './Pages/Quizpage/Quizpage.jsx';
+import HomePage from './Pages/Homepage/Homepage.jsx';
+import Createquizpage from './Pages/CreateQuizPage/Createquizpage.jsx';
 
 
 const router = createBrowserRouter([
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
     path : "/quiz/:id",
     element : <Quizpage/>
   },
+  {
+    path : "/quiz/create",
+    element : <Createquizpage/>
+  }
 ]);
 
 const App = () => {

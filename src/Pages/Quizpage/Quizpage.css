@@ -1,0 +1,52 @@
+.quiz-card {
+  background-color: #fff9e6; /* light cream background color */
+  border: 1px solid #e2c480; /* border matching background color */
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px;
+  width: 200px;
+  height: 150px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  position: relative;
+}
+
+.quiz-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background-color: #ffffff; /* white background color */
+  border: 1px solid #e2c480; /* border matching background color */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 10;
+  text-align: center;
+}
+
+.modal p {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.modal button {
+  background-color: #4caf50;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.modal button:hover {
+  background-color: #388e3c;
+}

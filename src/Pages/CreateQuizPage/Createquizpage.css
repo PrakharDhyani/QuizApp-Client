@@ -1,0 +1,71 @@
+label{
+  margin-right: 2rem;
+}
+.create-quiz-form {
+  max-width: 800px;
+  margin: 4rem auto 0 auto;
+  padding: 20px;
+  background: #faf3e0;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.create-quiz-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-quiz-form label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.create-quiz-form input,
+.create-quiz-form select,
+.create-quiz-form button {
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #e2c480;
+  font-size: 16px;
+}
+
+.create-quiz-form button {
+  margin-top: 20px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.create-quiz-form button:hover {
+  background-color: #388e3c;
+}
+
+.question-form {
+  margin-top: 20px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e2c480;
+  border-radius: 4px;
+}
+
+.question-form label {
+  display: block;
+  margin-top: 10px;
+}
+
+.question-form input[type="text"],
+.question-form input[type="file"],
+.question-form select {
+  width: 100%;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #e2c480;
+}
+
+.question-form input[type="text"] {
+  margin-bottom: 10px;
+}

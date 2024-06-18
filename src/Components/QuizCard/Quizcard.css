@@ -1,5 +1,5 @@
 .quiz-card{
-    height:12%;
+    height:180px;
     width: 15rem;
     min-width: 12rem;
     background-color: #ffffff;
@@ -10,6 +10,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+  
     
 }
 .quiz-card h2 {

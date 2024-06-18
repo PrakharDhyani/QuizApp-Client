@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
-import "./Quizcard.css"
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import api from '../../Common/apis'; // Assuming 'api' contains the base URL for your API
+import './Quizcard.css';
 
-
-
-function Quizcard({quiz}) {
+function Quizcard({ quiz }) {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -15,31 +17,44 @@ function Quizcard({quiz}) {
   };
 
   const handlePlay = () => {
-      console.log("play clicked")
-      
-  }
+    navigate(`/quiz/${quiz.id}`);
+  };
 
   const handleUpdate = () => {
-    console.log("update click")
-  }
-  
-  const handleDelete = () => {
-    console.log("delete click")
-  }
+    console.log('Update clicked');
+  };
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm('Are you sure you want to delete this quiz?');
+    if (confirmed) {
+      try {
+        await api.delete(`quizzes/${quiz.id}`);
+        console.log('Quiz deleted');
+        // Optionally, you can add logic to remove the quiz from the UI after successful deletion
+      } catch (error) {
+        console.error('Failed to delete the quiz', error);
+      }
+    }
+  };
 
   return (
-    <div className='quiz-card' style={{backgroundColor: quiz.background_color }}  onMouseEnter={handleMouseEnter}  onMouseLeave={handleMouseLeave} >
-     {quiz.title}
-     {isHovered && (
+    <div
+      className='quiz-card'
+      style={{ backgroundColor: quiz.background_color }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {quiz.title}
+      {isHovered && (
         <div className='modal'>
           <p>This is a modal for {quiz.title}</p>
           <button onClick={handlePlay}>Play</button>
-          <button  onClick={handleUpdate} >update</button>
-          <button onClick={handleDelete} >Delete</button>
+          <button onClick={handleUpdate}>Update</button>
+          <button onClick={handleDelete}>Delete</button>
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default Quizcard
+export default Quizcard;

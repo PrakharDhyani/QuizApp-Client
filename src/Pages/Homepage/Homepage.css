@@ -53,6 +53,8 @@
     gap: 1rem;
     padding: 1rem;
     justify-content: flex-start;
+    overflow-y: auto;
+    max-height: 85vh;
   }
   
   .create-quiz-button {

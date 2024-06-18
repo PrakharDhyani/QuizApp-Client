@@ -82,6 +82,90 @@
       ],
       "num_questions": 5,
       "background_color": "#f0f0f0"
+    },
+    {
+      "id": 8,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 9,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 10,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 11,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 12,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 13,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
+    },
+    {
+      "id": 14,
+      "title": "History Quiz",
+      "photos": [
+        "https://example.com/history_photo1.jpg",
+        "https://example.com/history_photo2.jpg",
+        "https://example.com/history_photo3.jpg",
+        "https://example.com/history_photo4.jpg"
+      ],
+      "num_questions": 5,
+      "background_color": "#f0f0f0"
     }
   ]
   
