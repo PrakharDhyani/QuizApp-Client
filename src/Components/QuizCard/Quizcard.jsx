@@ -47,7 +47,7 @@ function Quizcard({ quiz }) {
       {quiz.title}
       {isHovered && (
         <div className='modal'>
-          <p>This is a modal for {quiz.title}</p>
+          <p>{quiz.title}</p>
           <button onClick={handlePlay}>Play</button>
           <button onClick={handleUpdate}>Update</button>
           <button onClick={handleDelete}>Delete</button>
