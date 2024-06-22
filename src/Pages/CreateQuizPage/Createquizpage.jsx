@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import api from '../../Common/apis';
+import axios from 'axios';
+import Header from '../../Components/Header/Header';
 import "./Createquizpage.css";
 
 function Createquizpage() {
@@ -69,189 +70,214 @@ function Createquizpage() {
     setQuestions(newQuestions);
   };
 
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'MyQuizCloud'); // Replace with your Cloudinary upload preset
+
+
+    const response = await axios.post(`https://api.cloudinary.com/v1_1/dntvaedst/upload`, formData);
+    return response.data.secure_url; // Return the secure URL of the uploaded file
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData();
-      formData.append('title', quizDetails.title);
-      formData.append('thumbnail', quizDetails.thumbnail);
-      formData.append('numQuestions', quizDetails.numQuestions);
-      formData.append('questions', JSON.stringify(questions));
+      // Upload thumbnail to Cloudinary
+      const thumbnailUrl = await uploadToCloudinary(quizDetails.thumbnail);
 
-      questions.forEach((question, index) => {
-        if (question.questionPhoto) {
-          formData.append(`questionPhoto${index}`, question.questionPhoto);
-        }
-        if (question.answerPhoto) {
-          formData.append(`answerPhoto${index}`, question.answerPhoto);
-        }
-        if (question.backgroundGif) {
-          formData.append(`backgroundGif${index}`, question.backgroundGif);
-        }
-        if (question.backgroundMp4) {
-          formData.append(`backgroundMp4${index}`, question.backgroundMp4);
-        }
-      });
+      // Upload questions media to Cloudinary
+      const updatedQuestions = await Promise.all(questions.map(async (question) => {
+        const questionPhotoUrl = question.questionPhoto ? await uploadToCloudinary(question.questionPhoto) : null;
+        const answerPhotoUrl = question.answerPhoto ? await uploadToCloudinary(question.answerPhoto) : null;
+        const backgroundGifUrl = question.backgroundGif ? await uploadToCloudinary(question.backgroundGif) : null;
+        const backgroundMp4Url = question.backgroundMp4 ? await uploadToCloudinary(question.backgroundMp4) : null;
 
-      const response = await api.post('/quizzes/createQuiz', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+        return {
+          ...question,
+          questionPhotoUrl,
+          answerPhotoUrl,
+          backgroundGifUrl,
+          backgroundMp4Url,
+        };
+      }));
 
-      console.log('Quiz created successfully:', response.data);
+      // Prepare data for backend
+      const quizData = {
+        title: quizDetails.title,
+        thumbnail: thumbnailUrl,
+        numQuestions: quizDetails.numQuestions,
+        questions: updatedQuestions,
+      };
+
+      // Send data to backend
+      const response = await axios.post('/api/quizzes', quizData);
+      console.log(response.data);
     } catch (error) {
       console.error('Error creating quiz:', error);
     }
   };
 
   return (
-    <div className="create-quiz-form">
-      {step === 1 && (
-        <form onSubmit={(e) => { e.preventDefault(); handleNext(); }}>
-          <div className="inputDiv">
-            <label>Title of Quiz</label>
-            <input
-              type="text"
-              name="title"
-              value={quizDetails.title}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="inputDiv">
-            <label>Upload Thumbnail</label>
-            <input
-              type="file"
-              name="thumbnail"
-              accept="image/*"
-              onChange={handleFileChange}
-              required
-            />
-          </div>
-          <div className="inputDiv">
-            <label>Number of Questions</label>
-            <input
-              type="number"
-              name="numQuestions"
-              min="1"
-              value={quizDetails.numQuestions}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <button type="submit">Next</button>
-        </form>
-      )}
-
-      {step === 2 && (
-        <form onSubmit={handleSubmit}>
-          {questions.map((question, index) => (
-            <div key={index} className="question-form">
-              <div>
-                <label>Question {index + 1}</label>
-                <input
-                  type="text"
-                  name="questionText"
-                  value={question.questionText}
-                  onChange={(e) => handleQuestionChange(index, e)}
-                  required
-                />
-              </div>
-              <div>
-                <label>Options</label>
-                {question.options.map((option, optionIndex) => (
-                  <input
-                    key={optionIndex}
-                    type="text"
-                    name={`option${optionIndex}`}
-                    value={option}
-                    onChange={(e) => handleOptionChange(index, optionIndex, e)}
+    <>
+      <Header />
+      <div className="main-container">
+        {step === 1 && (
+          <form onSubmit={handleNext} className="create-quiz-form">
+            <div className="inputDiv">
+              <label>Quiz Title:</label>
+              <input
+                type="text"
+                name="title"
+                value={quizDetails.title}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="inputDiv">
+              <label>Thumbnail:</label>
+              <input
+                type="file"
+                name="thumbnail"
+                accept="image/*"
+                onChange={handleFileChange}
+                required
+              />
+            </div>
+            <div className="inputDiv">
+              <label>Number of Questions:</label>
+              <input
+                type="number"
+                name="numQuestions"
+                value={quizDetails.numQuestions}
+                onChange={handleInputChange}
+                required
+                min="1"
+              />
+            </div>
+            <button type="submit">Next</button>
+          </form>
+        )}
+        {step === 2 && (
+          <form onSubmit={handleSubmit} className="questions-form">
+            {questions.map((question, index) => (
+              <div key={index} className="question-form">
+                <div className="inputDiv">
+                  <label>Question {index + 1}:</label>
+                  <textarea
+                    name="questionText"
+                    value={question.questionText}
+                    onChange={(e) => handleQuestionChange(index, e)}
                     required
                   />
-                ))}
-              </div>
-              <div>
-                <label>Correct Option</label>
-                <select
-                  name="correctOption"
-                  value={question.correctOption}
-                  onChange={(e) => handleQuestionChange(index, e)}
-                  required
-                >
+                </div>
+                <div className="inputDiv">
+                  <label>Options:</label>
                   {question.options.map((option, optionIndex) => (
-                    <option key={optionIndex} value={option}>
-                      {option}
-                    </option>
+                    <input
+                      key={optionIndex}
+                      type="text"
+                      value={option}
+                      onChange={(e) => handleOptionChange(index, optionIndex, e)}
+                      required
+                    />
                   ))}
-                </select>
-              </div>
-              <div>
-                <label>Question Photo</label>
-                <input
-                  type="file"
-                  name="questionPhoto"
-                  accept="image/*"
-                  onChange={(e) => handleQuestionFileChange(index, e)}
-                />
-              </div>
-              <div>
-                <label>Answer Photo</label>
-                <input
-                  type="file"
-                  name="answerPhoto"
-                  accept="image/*"
-                  onChange={(e) => handleQuestionFileChange(index, e)}
-                />
-              </div>
-              <div>
-                <label>Background Animation</label>
-                <select
-                  name="backgroundAnimation"
-                  value={question.backgroundAnimation}
-                  onChange={(e) => handleQuestionChange(index, e)}
-                >
-                  <option value="gif">Upload GIF</option>
-                  <option value="mp4">Upload MP4</option>
-                  <option value="predefined">Predefined Animation</option>
-                </select>
-                {question.backgroundAnimation === 'gif' && (
-                  <input
-                    type="file"
-                    name="backgroundGif"
-                    accept="image/gif"
-                    onChange={(e) => handleQuestionFileChange(index, e)}
-                  />
-                )}
-                {question.backgroundAnimation === 'mp4' && (
-                  <input
-                    type="file"
-                    name="backgroundMp4"
-                    accept="video/mp4"
-                    onChange={(e) => handleQuestionFileChange(index, e)}
-                  />
-                )}
-                {question.backgroundAnimation === 'predefined' && (
+                </div>
+                <div className="inputDiv">
+                  <label>Correct Option:</label>
                   <select
-                    name="predefinedAnimation"
-                    value={question.predefinedAnimation}
+                    name="correctOption"
+                    value={question.correctOption}
                     onChange={(e) => handleQuestionChange(index, e)}
+                    required
                   >
-                    <option value="">Select an animation</option>
-                    {predefinedAnimations.map((animation) => (
-                      <option key={animation.file} value={animation.file}>
-                        {animation.name}
+                    <option value="">Select Correct Option</option>
+                    {question.options.map((option, optionIndex) => (
+                      <option key={optionIndex} value={optionIndex}>
+                        {option}
                       </option>
                     ))}
                   </select>
+                </div>
+                <div className="inputDiv">
+                  <label>Upload Question Photo:</label>
+                  <input
+                    type="file"
+                    name="questionPhoto"
+                    accept="image/*"
+                    onChange={(e) => handleQuestionFileChange(index, e)}
+                  />
+                </div>
+                <div className="inputDiv">
+                  <label>Upload Answer Photo:</label>
+                  <input
+                    type="file"
+                    name="answerPhoto"
+                    accept="image/*"
+                    onChange={(e) => handleQuestionFileChange(index, e)}
+                  />
+                </div>
+                <div className="inputDiv">
+                  <label>Background Animation:</label>
+                  <select
+                    name="backgroundAnimation"
+                    value={question.backgroundAnimation}
+                    onChange={(e) => handleQuestionChange(index, e)}
+                    required
+                  >
+                    <option value="text">Text</option>
+                    <option value="predefined">Predefined</option>
+                    <option value="gif">GIF</option>
+                    <option value="mp4">MP4</option>
+                  </select>
+                </div>
+                {question.backgroundAnimation === 'predefined' && (
+                  <div className="inputDiv">
+                    <label>Choose Predefined Animation:</label>
+                    <select
+                      name="predefinedAnimation"
+                      value={question.predefinedAnimation}
+                      onChange={(e) => handleQuestionChange(index, e)}
+                      required
+                    >
+                      <option value="">Select Animation</option>
+                      {predefinedAnimations.map((animation, animationIndex) => (
+                        <option key={animationIndex} value={animation.file}>
+                          {animation.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {question.backgroundAnimation === 'gif' && (
+                  <div className="inputDiv">
+                    <label>Upload GIF:</label>
+                    <input
+                      type="file"
+                      name="backgroundGif"
+                      accept="image/gif"
+                      onChange={(e) => handleQuestionFileChange(index, e)}
+                    />
+                  </div>
+                )}
+                {question.backgroundAnimation === 'mp4' && (
+                  <div className="inputDiv">
+                    <label>Upload MP4:</label>
+                    <input
+                      type="file"
+                      name="backgroundMp4"
+                      accept="video/mp4"
+                      onChange={(e) => handleQuestionFileChange(index, e)}
+                    />
+                  </div>
                 )}
               </div>
-            </div>
-          ))}
-          <button type="submit">Create Quiz</button>
-        </form>
-      )}
-    </div>
+            ))}
+            <button type="submit">Create Quiz</button>
+          </form>
+        )}
+      </div>
+    </>
   );
 }
 
