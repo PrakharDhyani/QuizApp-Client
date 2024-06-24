@@ -138,7 +138,14 @@ function Createquizpage() {
   
           let backgroundAnimations = {};
           if (question.backgroundAnimationOption === 'predefined') {
-            backgroundAnimations[question.predefinedAnimationUrl] = question.predefinedAnimationUrl;
+            // Use the predefined animations from fetched data
+            const selectedAnimation = Object.entries(predefinedAnimations).find(
+              ([key, url]) => url === question.predefinedAnimationUrl
+            );
+            if (selectedAnimation) {
+              const [key, url] = selectedAnimation;
+              backgroundAnimations[key] = url;
+            }
           } else if (
             question.backgroundAnimationOption === 'upload' &&
             question.backgroundAnimationFile
@@ -184,10 +191,14 @@ function Createquizpage() {
       console.log("Sending quiz data to backend...");
       const response = await api.post('/quizzes/createQuiz', newQuizData);
       console.log("Quiz creation response:", response.data);
+  
+      // Show alert on successful quiz creation
+      alert("Quiz has been successfully created!");
     } catch (error) {
       console.error('Error creating quiz:', error);
     }
   };
+  
 
   return (
     <>
