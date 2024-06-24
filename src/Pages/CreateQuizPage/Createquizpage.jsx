@@ -5,25 +5,34 @@ import api from "../../Common/apis";
 import "./Createquizpage.css";
 
 function Createquizpage() {
+  // State to manage current step in the form
   const [step, setStep] = useState(1);
+
+  // State to manage quiz details
   const [quizDetails, setQuizDetails] = useState({
     title: "",
     thumbnail: null,
     numQuestions: 1,
   });
+
+  // State to manage questions array
   const [questions, setQuestions] = useState([]);
-  const [predefinedAnimations, setPredefinedAnimations] = useState([]);
+
+  // State to manage predefined animations from the server
+  const [predefinedAnimations, setPredefinedAnimations] = useState({});
   const [loadingPredefinedAnimations, setLoadingPredefinedAnimations] = useState(true);
 
+  // Fetch predefined animations from the server when component mounts
   useEffect(() => {
     const fetchPredefinedAnimations = async () => {
       try {
+        console.log("Fetching predefined animations...");
         const response = await api.get("/cloudinaryurls");
-        console.log('Fetched predefined animations:', response.data); // Log the response
+        console.log('Fetched predefined animations:', response.data);
         setPredefinedAnimations(response.data);
       } catch (error) {
         console.error("Error fetching predefined animations:", error);
-        setPredefinedAnimations([]);
+        setPredefinedAnimations({});
       } finally {
         setLoadingPredefinedAnimations(false);
       }
@@ -32,16 +41,19 @@ function Createquizpage() {
     fetchPredefinedAnimations();
   }, []);
 
+  // Handle changes to quiz details inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setQuizDetails({ ...quizDetails, [name]: value });
   };
 
+  // Handle file input changes
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     setQuizDetails({ ...quizDetails, [name]: files[0] });
   };
 
+  // Proceed to the next step and initialize questions array based on number of questions
   const handleNext = () => {
     setQuestions(
       Array.from({ length: quizDetails.numQuestions }, () => ({
@@ -58,6 +70,7 @@ function Createquizpage() {
     setStep(2);
   };
 
+  // Handle changes to question inputs
   const handleQuestionChange = (index, e) => {
     const { name, value } = e.target;
     const newQuestions = [...questions];
@@ -65,6 +78,7 @@ function Createquizpage() {
     setQuestions(newQuestions);
   };
 
+  // Handle changes to option inputs for questions
   const handleOptionChange = (index, optionIndex, e) => {
     const { value } = e.target;
     const newQuestions = [...questions];
@@ -72,6 +86,7 @@ function Createquizpage() {
     setQuestions(newQuestions);
   };
 
+  // Handle file input changes for questions
   const handleQuestionFileChange = (index, e) => {
     const { name, files } = e.target;
     const newQuestions = [...questions];
@@ -79,77 +94,93 @@ function Createquizpage() {
     setQuestions(newQuestions);
   };
 
+  // Function to upload files to Cloudinary
   const uploadToCloudinary = async (file) => {
+    if (!file) return null;
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "QuizCloud"); // Replace with your Cloudinary upload preset
+    formData.append("upload_preset", "QuizCloud");
 
-    const uploadRes = await axios.post(
-      "https://api.cloudinary.com/v1_1/dwwhvnadl/auto/upload",
-      formData
-    );
-    return uploadRes.data.url; // Return the secure URL of the uploaded file
+    try {
+      console.log("Uploading file to Cloudinary...");
+      const uploadRes = await axios.post(
+        "https://api.cloudinary.com/v1_1/dwwhvnadl/auto/upload",
+        formData
+      );
+      const { original_filename, secure_url } = uploadRes.data;
+      console.log("Uploaded file:", { original_filename, secure_url });
+      return { filename: original_filename, url: secure_url };
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      return null;
+    }
   };
 
+  // Handle form submission for creating the quiz
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       console.log("Uploading thumbnail...");
-      const thumbnailUrl = await uploadToCloudinary(quizDetails.thumbnail);
+      const thumbnailData = await uploadToCloudinary(quizDetails.thumbnail);
+      const thumbnailUrl = thumbnailData?.url || "";
       console.log("Thumbnail uploaded:", thumbnailUrl);
-
+  
       console.log("Preparing questions data...");
       const updatedQuestions = await Promise.all(
         questions.map(async (question, index) => {
           console.log(`Processing question ${index + 1}...`);
-          const questionPhotoUrl = question.questionPhoto
+          const questionPhotoData = question.questionPhoto
             ? await uploadToCloudinary(question.questionPhoto)
             : null;
-          const answerPhotoUrl = question.answerPhoto
+          const answerPhotoData = question.answerPhoto
             ? await uploadToCloudinary(question.answerPhoto)
             : null;
-
-          let backgroundAnimation = '';
+  
+          let backgroundAnimations = {};
           if (question.backgroundAnimationOption === 'predefined') {
-            backgroundAnimation = question.predefinedAnimationUrl;
+            backgroundAnimations[question.predefinedAnimationUrl] = question.predefinedAnimationUrl;
           } else if (
             question.backgroundAnimationOption === 'upload' &&
             question.backgroundAnimationFile
           ) {
-            backgroundAnimation = await uploadToCloudinary(
+            const animationData = await uploadToCloudinary(
               question.backgroundAnimationFile
             );
+            if (animationData) {
+              console.log("Uploaded background animation file:", animationData);
+              backgroundAnimations[animationData.filename] = animationData.url;
+            }
           }
-
+  
           console.log(`Question ${index + 1} processed data:`, {
             questionText: question.questionText,
             options: question.options,
             correctAnswer: question.correctOption,
-            questionPhotoUrl,
-            answerPhotoUrl,
-            backgroundAnimation,
+            questionPhotoUrl: questionPhotoData?.url || "",
+            answerPhotoUrl: answerPhotoData?.url || "",
+            backgroundAnimations,
           });
-
+  
           return {
             questionText: question.questionText,
             options: question.options,
             correctAnswer: question.correctOption,
-            questionPhotoUrl,
-            answerPhotoUrl,
-            backgroundAnimation,
+            questionPhotoUrl: questionPhotoData?.url || "",
+            answerPhotoUrl: answerPhotoData?.url || "",
+            backgroundAnimations,
           };
         })
       );
-
+  
       const newQuizData = {
         title: quizDetails.title,
         thumbnail: thumbnailUrl,
         numQuestions: quizDetails.numQuestions,
         questions: updatedQuestions,
       };
-
+  
       console.log("Quiz data prepared:", newQuizData);
-
+  
       console.log("Sending quiz data to backend...");
       const response = await api.post('/quizzes/createQuiz', newQuizData);
       console.log("Quiz creation response:", response.data);
@@ -280,9 +311,9 @@ function Createquizpage() {
                       required
                     >
                       <option value="">Select animation</option>
-                      {predefinedAnimations.map((animation, animationIndex) => (
-                        <option key={animationIndex} value={animation.url}>
-                          {animation.name}
+                      {Object.entries(predefinedAnimations).map(([key, url], animationIndex) => (
+                        <option key={animationIndex} value={url}>
+                          {key}
                         </option>
                       ))}
                     </select>
@@ -291,7 +322,7 @@ function Createquizpage() {
                     <input
                       type="file"
                       name="backgroundAnimationFile"
-                      accept="image/*"
+                      accept="image/*,video/mp4"
                       onChange={(e) => handleQuestionFileChange(index, e)}
                       required
                     />
@@ -301,6 +332,12 @@ function Createquizpage() {
             ))}
             <button type="submit">Create Quiz</button>
           </form>
+        )}
+        {loadingPredefinedAnimations && (
+          <div>Loading predefined animations...</div>
+        )}
+        {!loadingPredefinedAnimations && Object.keys(predefinedAnimations).length === 0 && (
+          <div>No predefined animations available.</div>
         )}
       </div>
     </>
