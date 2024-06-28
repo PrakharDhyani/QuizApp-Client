@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import api from '../../Common/apis'; // Assuming 'api' contains the base URL for your API
 import './Quizcard.css';
 
@@ -16,8 +15,12 @@ function Quizcard({ quiz }) {
     setIsHovered(false);
   };
 
-  const handlePlay = () => {
-    navigate(`/quiz/${quiz.id}`);
+  const handlePlay = async () => {
+    const confirmed = window.confirm('Do you want to start the quiz?');
+    if (confirmed) {
+      // Fetch quiz details if necessary (already available here)
+      navigate(`/quiz/${quiz._id}`);
+    }
   };
 
   const handleUpdate = () => {

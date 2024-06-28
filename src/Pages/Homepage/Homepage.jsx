@@ -1,33 +1,45 @@
-import React from 'react';
-import QuizData from "../../data/quiz_Data.json";
-import QuizCard from "../../Components/QuizCard/Quizcard"
-import CreateQuizButton from "../CreateQuizPage/Createquizpage"
+import React, { useEffect, useState } from 'react';
+import QuizCard from "../../Components/QuizCard/Quizcard";
 import { useNavigate } from 'react-router-dom';
-import "./Homepage.css"
 import Header from '../../Components/Header/Header';
+import api from '../../Common/apis';
 
-
-
+import "./Homepage.css";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const handleCreateQuiz = ()=>{
-      navigate("/quiz/create")
+  const [quizData, setQuizData] = useState([]);
+
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        const response = await api.get("/quizzes");
+        console.log(response.data.quizzes);
+        setQuizData(response.data.quizzes);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchQuizzes();
+  }, []);
+
+  const handleCreateQuiz = () => {
+    navigate("/quiz/create");
   }
 
-  const quizzes = QuizData
   return (
     <div className="homepage">
-      <Header/>
+      <Header />
       <main className="main-content">
         <div className="quiz-cards">
-          {quizzes.map((quiz) => (
-            <QuizCard key={quiz.id} quiz={quiz} />
-          ))}
-
-          <div className='quiz-card'  onClick={handleCreateQuiz} >
-            + Createquiz 
-        </div>
+          {quizData && quizData.map((quiz) => (
+            <QuizCard key={quiz._id} quiz={quiz} />
+          ))} 
+          
+          <div className='quiz-card create-quiz-card' onClick={handleCreateQuiz}>
+            + Create Quiz
+          </div>
         </div>
       </main>
     </div>
