@@ -157,24 +157,27 @@ function Quizpage() {
               <img 
                 src={showAnswer ? question.answerPhotoUrl : question.questionPhotoUrl} 
                 alt="Question" 
-                className="question-image" 
+                className="question-image img-animation" 
               />
               <div className="options">
                 {question.options.map((option, index) => (
                   <div
                     key={index}
-                    className={`option ${showAnswer && option === question.correctAnswer ? 'correct' : ''}`}
+                    className={`option option-${index+1} ${showAnswer && option === question.correctAnswer ? 'correct' : ''}`}
                   >
+                    <span className="option-label">{String.fromCharCode(97 + index)}</span>
                     {option}
                   </div>
                 ))}
               </div>
             </div>
             <div className="timer-container">
-              <div 
-                className={`timer-bar ${timer <= 3 ? 'urgent' : ''}`} 
-                style={{ width: `${(timer / 10) * 100}%` }}
-              ></div>
+              <div className='timer-bar-container'>
+                <div 
+                    className={`timer-bar ${timer <= 3 ? 'urgent' : ''}`} 
+                    style={{ width: `${(timer / 10) * 100}%` }}
+                ></div>
+              </div>
             </div>
           </div>
         </div>

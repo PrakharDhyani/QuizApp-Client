@@ -6,6 +6,7 @@ import {
 import Quizpage from './Pages/Quizpage/Quizpage.jsx';
 import HomePage from './Pages/Homepage/Homepage.jsx';
 import Createquizpage from './Pages/CreateQuizPage/Createquizpage.jsx';
+import TestQuiz from './Pages/test/TestQuiz.jsx';
 
 
 const router = createBrowserRouter([
@@ -20,7 +21,11 @@ const router = createBrowserRouter([
   {
     path : "/quiz/create",
     element : <Createquizpage/>
-  }
+  },
+  {
+    path : "/test-quiz/:id",
+    element : <TestQuiz/>
+  },
 ]);
 
 const App = () => {
