@@ -12,6 +12,7 @@ function Quizpage() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isQuizStarted, setIsQuizStarted] = useState(false);
   const [timer, setTimer] = useState(10);
+  const [showAnswer, setShowAnswer] = useState(false);
   const mediaRecorderRef = useRef(null);
   const streamRef = useRef(null);
   const handle = useFullScreenHandle();
@@ -35,7 +36,8 @@ function Quizpage() {
       timerRef.current = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer === 1) {
-            nextSlide();
+            setShowAnswer(true);
+            setTimeout(nextSlide, 3000); // Show the answer for 3 seconds before moving to the next slide
             return 10;
           }
           return prevTimer - 1;
@@ -95,6 +97,7 @@ function Quizpage() {
   };
 
   const nextSlide = () => {
+    setShowAnswer(false);
     setCurrentSlideIndex((prevIndex) => {
       if (prevIndex + 1 < slides.length) {
         return prevIndex + 1;
@@ -110,9 +113,10 @@ function Quizpage() {
   const slides = [
     { type: 'intro' },
     { type: 'thumbnail', thumbnail: quiz.thumbnail },
-    ...quiz.questions.map((question, index) => ({ type: 'transition', index })),
-    ...quiz.questions.map((question, index) => ({ type: 'question', question })),
-    { type: 'transition', index: quiz.questions.length }
+    ...quiz.questions.flatMap((question, index) => [
+      { type: 'question', question },
+      { type: 'transition', index }
+    ]),
   ];
 
   const renderSlide = () => {
@@ -123,7 +127,14 @@ function Quizpage() {
     }
 
     if (slide.type === 'thumbnail') {
-      return <img src={slide.thumbnail} alt="Quiz Thumbnail" className="full-screen-media" onLoad={nextSlide} />;
+      return (
+        <img
+          src={slide.thumbnail}
+          alt="Quiz Thumbnail"
+          className="full-screen-media"
+          onLoad={() => setTimeout(nextSlide, 5000)}
+        />
+      );
     }
 
     if (slide.type === 'transition') {
@@ -132,29 +143,39 @@ function Quizpage() {
 
     if (slide.type === 'question') {
       const { question } = slide;
+      const animationUrl = Object.values(question.backgroundAnimations)[0];
+
       return (
         <div className="question-slide full-screen-media">
-          <div className="question-header">
-            <div className="question-number">{currentSlideIndex / 2 + 1}</div>
-            <div className="question-text">{question.question}</div>
-          </div>
-          <div className="question-body">
-            <img 
-              src={question.image} 
-              alt="Question" 
-              className="question-image" 
-            />
-            <div className="options">
-              {question.options.map((option, index) => (
-                <div key={index} className="option">{option}</div>
-              ))}
+          <video src={animationUrl} autoPlay loop muted className="background-video" />
+          <div className="question-section">
+            <div className="question-header">
+              <div className="question-number">{Math.floor(currentSlideIndex / 2) + 1}</div>
+              <div className="question-text">{question.questionText}</div>
             </div>
-          </div>
-          <div className="timer-container">
-            <div 
-              className={`timer-bar ${timer <= 3 ? 'urgent' : ''}`} 
-              style={{ width: `${(timer / 10) * 100}%` }}
-            ></div>
+            <div className="question-body">
+              <img 
+                src={showAnswer ? question.answerPhotoUrl : question.questionPhotoUrl} 
+                alt="Question" 
+                className="question-image" 
+              />
+              <div className="options">
+                {question.options.map((option, index) => (
+                  <div
+                    key={index}
+                    className={`option ${showAnswer && option === question.correctAnswer ? 'correct' : ''}`}
+                  >
+                    {option}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="timer-container">
+              <div 
+                className={`timer-bar ${timer <= 3 ? 'urgent' : ''}`} 
+                style={{ width: `${(timer / 10) * 100}%` }}
+              ></div>
+            </div>
           </div>
         </div>
       );
