@@ -13,6 +13,7 @@ function Quizpage() {
   const [isQuizStarted, setIsQuizStarted] = useState(false);
   const [timer, setTimer] = useState(10);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const mediaRecorderRef = useRef(null);
   const streamRef = useRef(null);
   const handle = useFullScreenHandle();
@@ -33,16 +34,7 @@ function Quizpage() {
 
   useEffect(() => {
     if (isQuizStarted) {
-      timerRef.current = setInterval(() => {
-        setTimer((prevTimer) => {
-          if (prevTimer === 1) {
-            setShowAnswer(true);
-            setTimeout(nextSlide, 3000); // Show the answer for 3 seconds before moving to the next slide
-            return 10;
-          }
-          return prevTimer - 1;
-        });
-      }, 1000);
+      startTimer();
     }
 
     return () => {
@@ -50,10 +42,29 @@ function Quizpage() {
     };
   }, [isQuizStarted]);
 
+  const startTimer = () => {
+    timerRef.current = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer === 1) {
+          setShowAnswer(true);
+          clearInterval(timerRef.current);
+          setTimeout(() => {
+            setShowAnswer(false);
+            setIsTransitioning(true);
+            // setTimeout(nextSlide, 3000); // Show transition for 3 seconds
+          }, 3000); // Show the answer for 3 seconds before transition
+          return 10;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000);
+  };
+
   const startScreenRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: { mediaSource: 'screen' }
+        audio: true,
+        video: true
       });
       streamRef.current = stream;
       const mediaRecorder = new MediaRecorder(stream);
@@ -97,9 +108,11 @@ function Quizpage() {
   };
 
   const nextSlide = () => {
-    setShowAnswer(false);
+    setIsTransitioning(false);
     setCurrentSlideIndex((prevIndex) => {
       if (prevIndex + 1 < slides.length) {
+        setTimer(10); // Reset timer for the next question
+        startTimer();
         return prevIndex + 1;
       } else {
         handleExitFullscreen();
@@ -120,6 +133,10 @@ function Quizpage() {
   ];
 
   const renderSlide = () => {
+    if (isTransitioning) {
+      return <video src="../../src/assets/transition.mp4" autoPlay onEnded={nextSlide} className="full-screen-media" />;
+    }
+
     const slide = slides[currentSlideIndex];
 
     if (slide.type === 'intro') {
@@ -137,12 +154,9 @@ function Quizpage() {
       );
     }
 
-    if (slide.type === 'transition') {
-      return <video src="../../src/assets/transition.mp4" autoPlay onEnded={nextSlide} className="full-screen-media" />;
-    }
-
     if (slide.type === 'question') {
       const { question } = slide;
+      console.log(question);
       const animationUrl = Object.values(question.backgroundAnimations)[0];
 
       return (
@@ -152,6 +166,9 @@ function Quizpage() {
             <div className="question-header">
               <div className="question-number">{Math.floor(currentSlideIndex / 2) + 1}</div>
               <div className="question-text">{question.questionText}</div>
+              <div className='timer'>
+                {timer}s
+              </div>
             </div>
             <div className="question-body">
               <img 
