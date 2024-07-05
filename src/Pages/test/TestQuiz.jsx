@@ -53,7 +53,7 @@ function TestQuiz() {
             {question?.options?.map((option, index) => (
               <div
                 key={index}
-                className={`option-${index+1}  option ${showAnswer && option === question?.correctAnswer ? 'correct' : ''}`}
+                className={`option-${index+1} ${index==3?'correct':''}  option ${showAnswer && option === question?.correctAnswer ? 'correct' : ''}`}
               >
                 <span className="option-label">{String.fromCharCode(97 + index)}</span>
                 {option}
