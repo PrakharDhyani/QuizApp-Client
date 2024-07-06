@@ -541,7 +541,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 1;
+  z-index: 0;
 }
 
 .quiz-details {
@@ -708,6 +708,7 @@
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
+
 /* .timer-container {
   
 } */
@@ -845,7 +846,12 @@
   position: relative;
   overflow: hidden;
 }
-
+.timer-bar-outer{
+  width: 100%;
+  position: relative;
+  height: 100%;
+  transition: all 0.1s ease-in;
+}
 .timer-bar-container{
   overflow: hidden;
   margin-top: 40px;
@@ -860,7 +866,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 200%; /* Twice the width of the container to create an infinite loop effect */
+  width: 100%; /* Twice the width of the container to create an infinite loop effect */
   height: 40px;
   background: repeating-linear-gradient(
     -45deg,
@@ -869,7 +875,7 @@
     #5BAC5B 10px,
     #5BAC5B 20px
   ); /* Adjust the colors and size of the tilted bars */
-  animation: moveBars 2s linear infinite;
+  /* animation: moveBars 2s linear infinite; */
 }
 .urgent{
   background: repeating-linear-gradient(

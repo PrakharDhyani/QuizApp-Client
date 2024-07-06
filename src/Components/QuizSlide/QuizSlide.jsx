@@ -8,6 +8,7 @@ const QuizSlide = ({ slide, nextSlide }) => {
   const [timer, setTimer] = useState(10);
   const [showAnswer, setShowAnswer] = useState(false);
   const timerRef = useRef(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     if (slide.type === 'question') {
@@ -28,7 +29,7 @@ const QuizSlide = ({ slide, nextSlide }) => {
           clearInterval(timerRef.current);
           setTimeout(() => {
             setShowAnswer(false);
-            nextSlide();
+            setIsTransitioning(true);
           }, 3000); // Show the answer for 3 seconds before transition
           return 10;
         }
@@ -36,6 +37,16 @@ const QuizSlide = ({ slide, nextSlide }) => {
       });
     }, 1000);
   };
+
+  useEffect(() => {
+    if (isTransitioning) {
+      nextSlide();
+    }
+  }, [isTransitioning]);
+
+  if (isTransitioning) {
+    return <TransitionSlide nextSlide={nextSlide} setIsTransitioning={setIsTransitioning} />;
+  }
 
   switch (slide.type) {
     case 'intro':
@@ -52,7 +63,7 @@ const QuizSlide = ({ slide, nextSlide }) => {
         />
       );
     case 'transition':
-      return <TransitionSlide nextSlide={nextSlide} />;
+      return <TransitionSlide nextSlide={nextSlide} setIsTransitioning={setIsTransitioning} />;
     default:
       return null;
   }

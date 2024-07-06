@@ -35,6 +35,7 @@ const QuestionSlide = ({ question, timer, showAnswer }) => {
         <div className="timer-container">
           <div className='timer-bar-container'>
             <div 
+            className='timer-bar-outer'
             style={{ width: `${(timer / 10) * 100}%` }}
             >
               <div 
